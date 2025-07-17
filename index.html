@@ -1,91 +1,29 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Shorts Promotion Demo</title>
-  <style>
-    body {
-      background-color: #e0e0e0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      padding: 30px 10px;
-    }
-    .mobile-frame {
-      width: 360px;
-      height: 720px;
-      background-color: #fff;
-      border-radius: 30px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-      position: relative;
-    }
-    .status-bar {
-      background-color: #f4f4f4;
-      padding: 8px 12px;
-      font-size: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .status-left {
-      display: flex;
-      gap: 5px;
-    }
-    .status-right {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-    .video-content {
-      margin-top: 20px;
-      padding: 10px;
-      height: calc(100% - 40px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    .video-box {
-      width: 90%;
-      height: 400px;
-      background-color: #000;
-      border-radius: 12px;
-      margin-bottom: 20px;
-      background-image: url('https://i.postimg.cc/SKkq3gHp/yt-frame.jpg');
-      background-size: cover;
-      background-position: center;
-    }
-    .promo-text {
-      font-size: 16px;
-      color: #333;
-      text-align: center;
-      padding: 0 10px;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status Bar Tool</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="container">
+    <h1>Status Bar Overlay Tool</h1>
 
-  <div class="mobile-frame">
-    <div class="status-bar">
-      <div class="status-left">
-        <span>🕘 9:41 AM</span>
-      </div>
-      <div class="status-right">
-        <span>📶</span>
-        <span>📡</span>
-        <span>🔋</span>
-      </div>
-    </div>
+    <input type="file" id="screenshotInput" accept="image/*" />
     
-    <div class="video-content">
-      <div class="video-box"></div>
-      <div class="promo-text">
-        हमारी YouTube Shorts वीडियो को प्रमोट करें — वीडियो एडिटिंग, क्रिएटिव कंटेंट और ब्रांडिंग के साथ। DM करें अभी!
-      </div>
-    </div>
+    <label for="modelSelect">Choose Mobile Model:</label>
+    <select id="modelSelect">
+      <option value="iphone13">iPhone 13</option>
+      <option value="pixel7">Pixel 7</option>
+    </select>
+
+    <button id="generateBtn">Generate Final Image</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <a id="downloadLink" download="final_screenshot.png" style="display:none;">Download Final Image</a>
   </div>
 
+  <script src="script.js"></script>
 </body>
 </html>
