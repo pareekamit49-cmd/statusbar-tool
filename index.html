@@ -1,134 +1,140 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Status Bar Tool</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
-      background-color: #f5f5f5;
+      background: #f1f1f1;
     }
-    h2 {
-      text-align: center;
-    }
-    .container {
-      max-width: 600px;
+    .editor {
+      max-width: 500px;
       margin: auto;
-      background: white;
+      background: #fff;
       padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     label {
       display: block;
-      margin-top: 10px;
-      font-weight: bold;
+      margin: 10px 0 4px;
     }
-    input, select {
+    input {
       width: 100%;
       padding: 8px;
-      margin-top: 4px;
-    }
-    canvas {
+      border-radius: 6px;
       border: 1px solid #ccc;
-      margin-top: 20px;
-      display: block;
-      width: 100%;
     }
-    .download-btn {
-      display: block;
+    #statusBar {
       margin-top: 20px;
-      text-align: center;
+      padding: 10px;
+      background: #000;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 10px;
+    }
+    #screenshot {
+      margin-top: 20px;
+      width: 100%;
+      max-height: 300px;
+      object-fit: contain;
+      border-radius: 10px;
+      border: 1px solid #ccc;
     }
     button {
+      margin-top: 20px;
       padding: 10px 20px;
-      font-size: 16px;
-      background-color: #3498db;
+      background: #4CAF50;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #45a049;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Status Bar Generator</h2>
-
-    <label for="battery">Battery (%)</label>
-    <input type="number" id="battery" min="1" max="100" value="85">
-
-    <label for="network">Network</label>
-    <select id="network">
-      <option>Jio 4G</option>
-      <option>Airtel</option>
-      <option>VI</option>
-      <option>BSNL</option>
-      <option>No Network</option>
-    </select>
+  <div class="editor">
+    <h2>Status Bar Editor</h2>
 
     <label for="time">Time</label>
-    <input type="text" id="time" value="9:41 AM">
+    <input type="text" id="time" placeholder="10:45 AM" value="10:45 AM" />
 
-    <label for="model">Phone Model</label>
-    <select id="model">
-      <option>iPhone X</option>
-      <option>Samsung S21</option>
-      <option>Redmi Note 10</option>
-      <option>Pixel 6</option>
-    </select>
+    <label for="network">Network</label>
+    <input type="text" id="network" placeholder="Jio 4G" value="Jio 4G" />
 
-    <label for="screenshot">Upload Screenshot (optional)</label>
-    <input type="file" id="screenshot" accept="image/*">
+    <label for="battery">Battery %</label>
+    <input type="text" id="battery" placeholder="87%" value="87%" />
 
-    <div class="download-btn">
-      <button onclick="generateStatusBar()">Generate & Download</button>
+    <label for="device">Device Name</label>
+    <input type="text" id="device" placeholder="Realme" value="Realme" />
+
+    <label for="upload">Upload Screenshot (Optional)</label>
+    <input type="file" id="upload" accept="image/*" />
+
+    <div id="statusBar">
+      <span id="status-time">10:45 AM</span>
+      <span id="status-network">Jio 4G</span>
+      <span id="status-battery">🔋87%</span>
     </div>
 
-    <canvas id="preview" width="400" height="100"></canvas>
+    <img id="screenshot" src="" alt="Screenshot preview" style="display: none;"/>
+
+    <button onclick="downloadImage()">Download</button>
   </div>
 
   <script>
-    function generateStatusBar() {
-      const battery = document.getElementById("battery").value;
-      const network = document.getElementById("network").value;
-      const time = document.getElementById("time").value;
-      const model = document.getElementById("model").value;
-      const canvas = document.getElementById("preview");
-      const ctx = canvas.getContext("2d");
+    const timeInput = document.getElementById('time');
+    const networkInput = document.getElementById('network');
+    const batteryInput = document.getElementById('battery');
 
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const statusTime = document.getElementById('status-time');
+    const statusNetwork = document.getElementById('status-network');
+    const statusBattery = document.getElementById('status-battery');
+    const screenshot = document.getElementById('screenshot');
+    const upload = document.getElementById('upload');
 
-      // Background
-      ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    timeInput.addEventListener('input', () => {
+      statusTime.textContent = timeInput.value;
+    });
 
-      // Time
-      ctx.fillStyle = "#fff";
-      ctx.font = "20px Arial";
-      ctx.fillText(time, 10, 30);
+    networkInput.addEventListener('input', () => {
+      statusNetwork.textContent = networkInput.value;
+    });
 
-      // Battery
-      ctx.fillText(`${battery}%`, 330, 30);
-      ctx.strokeStyle = "#fff";
-      ctx.strokeRect(370, 15, 20, 10);
-      ctx.fillStyle = "#0f0";
-      ctx.fillRect(370, 15, (battery / 100) * 20, 10);
+    batteryInput.addEventListener('input', () => {
+      statusBattery.textContent = '🔋' + batteryInput.value;
+    });
 
-      // Network
-      ctx.fillStyle = "#fff";
-      ctx.fillText(network, 10, 70);
+    upload.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (event) {
+          screenshot.src = event.target.result;
+          screenshot.style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+      }
+    });
 
-      // Phone model
-      ctx.fillText(`Model: ${model}`, 200, 70);
-
-      // Download
-      const link = document.createElement("a");
-      link.download = "statusbar.png";
-      link.href = canvas.toDataURL();
-      link.click();
+    function downloadImage() {
+      html2canvas(document.querySelector('.editor')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'status-bar-image.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
     }
   </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </body>
 </html>
