@@ -1,32 +1,48 @@
-function generateStatusBar() {
-  const brand = document.getElementById("brandSelect").value;
-  const fileInput = document.getElementById("screenshotUpload");
+const screenshotInput = document.getElementById('screenshotInput');
+const modelSelect = document.getElementById('modelSelect');
+const generateBtn = document.getElementById('generateBtn');
+const canvas = document.getElementById('canvas');
+const downloadLink = document.getElementById('downloadLink');
 
-  if (!fileInput.files.length) {
-    alert("कृपया एक स्क्रीनशॉट अपलोड करें।");
+let uploadedImage = null;
+
+screenshotInput.addEventListener('change', (event) => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    const img = new Image();
+    img.onload = () => {
+      uploadedImage = img;
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+});
+
+generateBtn.addEventListener('click', () => {
+  if (!uploadedImage) {
+    alert('Please upload a screenshot first.');
     return;
   }
 
-  const file = fileInput.files[0];
-  const reader = new FileReader();
+  const statusBarImage = new Image();
+  statusBarImage.src = `assets/${modelSelect.value}.png`;
 
-  reader.onload = function (e) {
-    const img = document.createElement("img");
-    img.src = e.target.result;
+  statusBarImage.onload = () => {
+    const ctx = canvas.getContext('2d');
+    canvas.width = uploadedImage.width;
+    canvas.height = uploadedImage.height;
 
-    // Placeholder: Status bar overlay simulate
-    const overlay = document.createElement("div");
-    overlay.innerText = `Status Bar: ${brand.toUpperCase()}`;
-    overlay.style.background = "black";
-    overlay.style.color = "white";
-    overlay.style.padding = "10px";
-    overlay.style.textAlign = "center";
+    // Draw original screenshot
+    ctx.drawImage(uploadedImage, 0, 0);
 
-    const container = document.getElementById("previewContainer");
-    container.innerHTML = "";
-    container.appendChild(overlay);
-    container.appendChild(img);
+    // Overlay status bar on top
+    ctx.drawImage(statusBarImage, 0, 0, uploadedImage.width, statusBarImage.height);
+
+    canvas.style.display = 'block';
+    downloadLink.href = canvas.toDataURL();
+    downloadLink.style.display = 'inline-block';
   };
-
-  reader.readAsDataURL(file);
-}
+});
