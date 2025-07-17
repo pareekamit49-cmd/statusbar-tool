@@ -1,45 +1,45 @@
-<input type="file" id="screenshotUploader" accept="image/*" />
-<canvas id="mergedCanvas" style="display:none;"></canvas>
-<button onclick="downloadMerged()">Download Final Image</button>
-<script>
-  let uploadedScreenshot = null;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Status Bar Tool</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Status Bar Overlay Tool</h1>
+  
+  <label for="device-select">Choose Device:</label>
+  <select id="device-select">
+    <option value="">--Select--</option>
+    <option value="samsung-a55">Samsung A55</option>
+    <option value="samsung-s24">Samsung S24</option>
+    <option value="iphone-15">iPhone 15</option>
+    <option value="iphone-13">iPhone 13</option>
+    <option value="vivo-v29">Vivo V29</option>
+    <option value="oppo-f25">Oppo F25</option>
+    <option value="realme-12">Realme 12</option>
+    <option value="poco-x6">POCO X6</option>
+    <option value="oneplus-nord">OnePlus Nord</option>
+    <option value="xiaomi-14">Xiaomi 14</option>
+    <option value="iqoo-z9">iQOO Z9</option>
+    <option value="motorola-edge">Motorola Edge</option>
+    <option value="tecno-camon">Tecno Camon</option>
+    <option value="infinix-gt">Infinix GT</option>
+    <option value="lava-blaze">Lava Blaze</option>
+    <option value="nothing-phone">Nothing Phone</option>
+    <option value="google-pixel7">Google Pixel 7</option>
+    <option value="redmi-note13">Redmi Note 13</option>
+    <option value="realme-narzo">Realme Narzo</option>
+    <option value="honor-90">Honor 90</option>
+  </select>
 
-  document.getElementById('screenshotUploader').addEventListener('change', function (e) {
-    const reader = new FileReader();
-    reader.onload = function (event) {
-      const img = new Image();
-      img.onload = function () {
-        uploadedScreenshot = img;
-        mergeStatusBar();
-      };
-      img.src = event.target.result;
-    };
-    reader.readAsDataURL(e.target.files[0]);
-  });
+  <div id="preview">
+    <img id="statusbar-img" src="" alt="Status Bar Preview" />
+  </div>
 
-  function mergeStatusBar() {
-    const canvas = document.getElementById('mergedCanvas');
-    const ctx = canvas.getContext('2d');
+  <button id="download-btn" style="display:none;">Download Status Bar</button>
 
-    const statusBar = document.getElementById('statusBarImage'); // id of selected PNG
-    const width = uploadedScreenshot.width;
-    const height = uploadedScreenshot.height;
-
-    canvas.width = width;
-    canvas.height = height;
-
-    ctx.drawImage(uploadedScreenshot, 0, 0, width, height); // base screenshot
-    ctx.drawImage(statusBar, 0, 0, width, statusBar.height); // overlay on top
-
-    canvas.style.display = 'block';
-  }
-
-  function downloadMerged() {
-    const canvas = document.getElementById('mergedCanvas');
-    const link = document.createElement('a');
-    link.download = 'final-image.png';
-    link.href = canvas.toDataURL();
-    link.click();
-  }
-</script>
-<img id="statusBarImage" src="statusbars/vivo.png" style="display:none;" />
+  <script src="script.js"></script>
+</body>
+</html>
