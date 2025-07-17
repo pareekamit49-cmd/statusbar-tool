@@ -1,117 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Status Bar Tool</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f2f2f2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      font-family: Arial, sans-serif;
       padding: 20px;
+      background-color: #f5f5f5;
     }
-    .container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      width: 300px;
+    h2 {
       text-align: center;
     }
-    .status-bar {
-      position: relative;
-      background-color: #000;
-      color: white;
-      height: 24px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 8px;
-      font-size: 12px;
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
     }
-    input[type="file"] {
+    label {
       display: block;
-      margin: 10px auto;
-    }
-    img.preview {
-      width: 100%;
       margin-top: 10px;
-      border-radius: 8px;
-      display: none;
+      font-weight: bold;
+    }
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-top: 4px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      display: block;
+      width: 100%;
+    }
+    .download-btn {
+      display: block;
+      margin-top: 20px;
+      text-align: center;
     }
     button {
-      margin-top: 10px;
-      padding: 8px 16px;
-      border: none;
-      background-color: #2196f3;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #3498db;
       color: white;
-      border-radius: 6px;
-      cursor: pointer;
+      border: none;
+      border-radius: 5px;
     }
   </style>
 </head>
 <body>
-
   <div class="container">
-    <h2>Status Bar Tool</h2>
-    <div class="status-bar" id="statusBar">
-      <span>9:41 AM</span>
-      <span>📶 🔋</span>
+    <h2>Status Bar Generator</h2>
+
+    <label for="battery">Battery (%)</label>
+    <input type="number" id="battery" min="1" max="100" value="85">
+
+    <label for="network">Network</label>
+    <select id="network">
+      <option>Jio 4G</option>
+      <option>Airtel</option>
+      <option>VI</option>
+      <option>BSNL</option>
+      <option>No Network</option>
+    </select>
+
+    <label for="time">Time</label>
+    <input type="text" id="time" value="9:41 AM">
+
+    <label for="model">Phone Model</label>
+    <select id="model">
+      <option>iPhone X</option>
+      <option>Samsung S21</option>
+      <option>Redmi Note 10</option>
+      <option>Pixel 6</option>
+    </select>
+
+    <label for="screenshot">Upload Screenshot (optional)</label>
+    <input type="file" id="screenshot" accept="image/*">
+
+    <div class="download-btn">
+      <button onclick="generateStatusBar()">Generate & Download</button>
     </div>
 
-    <input type="file" accept="image/*" id="upload" />
-    <img id="preview" class="preview" />
-
-    <button onclick="downloadImage()">Download</button>
+    <canvas id="preview" width="400" height="100"></canvas>
   </div>
 
   <script>
-    const upload = document.getElementById("upload");
-    const preview = document.getElementById("preview");
-
-    upload.addEventListener("change", function () {
-      const file = this.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          preview.src = e.target.result;
-          preview.style.display = "block";
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function downloadImage() {
-      const canvas = document.createElement("canvas");
+    function generateStatusBar() {
+      const battery = document.getElementById("battery").value;
+      const network = document.getElementById("network").value;
+      const time = document.getElementById("time").value;
+      const model = document.getElementById("model").value;
+      const canvas = document.getElementById("preview");
       const ctx = canvas.getContext("2d");
-      const img = document.getElementById("preview");
 
-      if (!img.src) {
-        alert("Please upload an image first.");
-        return;
-      }
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      canvas.width = img.width;
-      canvas.height = img.height + 24; // status bar height
-
-      // Draw status bar
+      // Background
       ctx.fillStyle = "#000";
-      ctx.fillRect(0, 0, canvas.width, 24);
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Time
       ctx.fillStyle = "#fff";
-      ctx.font = "14px sans-serif";
-      ctx.fillText("9:41 AM", 10, 16);
-      ctx.fillText("📶 🔋", canvas.width - 50, 16);
+      ctx.font = "20px Arial";
+      ctx.fillText(time, 10, 30);
 
-      // Draw image below status bar
-      ctx.drawImage(img, 0, 24, img.width, img.height);
+      // Battery
+      ctx.fillText(`${battery}%`, 330, 30);
+      ctx.strokeStyle = "#fff";
+      ctx.strokeRect(370, 15, 20, 10);
+      ctx.fillStyle = "#0f0";
+      ctx.fillRect(370, 15, (battery / 100) * 20, 10);
 
+      // Network
+      ctx.fillStyle = "#fff";
+      ctx.fillText(network, 10, 70);
+
+      // Phone model
+      ctx.fillText(`Model: ${model}`, 200, 70);
+
+      // Download
       const link = document.createElement("a");
-      link.download = "statusbar-image.png";
+      link.download = "statusbar.png";
       link.href = canvas.toDataURL();
       link.click();
     }
