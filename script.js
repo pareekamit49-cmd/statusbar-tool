@@ -1,24 +1,32 @@
-document.getElementById("device-select").addEventListener("change", function () {
-  const device = this.value;
-  const img = document.getElementById("statusbar-img");
-  const downloadBtn = document.getElementById("download-btn");
+function generateStatusBar() {
+  const brand = document.getElementById("brandSelect").value;
+  const fileInput = document.getElementById("screenshotUpload");
 
-  if (device) {
-    const imgPath = `assets/${device}.png`;
-    img.src = imgPath;
-    img.style.display = "block";
-    downloadBtn.style.display = "inline-block";
-    downloadBtn.onclick = () => {
-      const a = document.createElement("a");
-      a.href = imgPath;
-      a.download = `${device}-statusbar.png`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-    };
-  } else {
-    img.src = "";
-    img.style.display = "none";
-    downloadBtn.style.display = "none";
+  if (!fileInput.files.length) {
+    alert("कृपया एक स्क्रीनशॉट अपलोड करें।");
+    return;
   }
-});
+
+  const file = fileInput.files[0];
+  const reader = new FileReader();
+
+  reader.onload = function (e) {
+    const img = document.createElement("img");
+    img.src = e.target.result;
+
+    // Placeholder: Status bar overlay simulate
+    const overlay = document.createElement("div");
+    overlay.innerText = `Status Bar: ${brand.toUpperCase()}`;
+    overlay.style.background = "black";
+    overlay.style.color = "white";
+    overlay.style.padding = "10px";
+    overlay.style.textAlign = "center";
+
+    const container = document.getElementById("previewContainer");
+    container.innerHTML = "";
+    container.appendChild(overlay);
+    container.appendChild(img);
+  };
+
+  reader.readAsDataURL(file);
+}
