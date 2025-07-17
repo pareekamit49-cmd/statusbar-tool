@@ -3,43 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Status Bar Tool</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>Statusbar Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f2f2;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .statusbar {
+      background-color: #222;
+      color: white;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 18px;
+    }
+    label {
+      display: block;
+      margin: 10px 0 5px;
+    }
+    input[type="text"] {
+      padding: 10px;
+      width: 100%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+    button {
+      padding: 10px 15px;
+      background-color: #28a745;
+      border: none;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .preview {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-  <h1>Status Bar Overlay Tool</h1>
-  
-  <label for="device-select">Choose Device:</label>
-  <select id="device-select">
-    <option value="">--Select--</option>
-    <option value="samsung-a55">Samsung A55</option>
-    <option value="samsung-s24">Samsung S24</option>
-    <option value="iphone-15">iPhone 15</option>
-    <option value="iphone-13">iPhone 13</option>
-    <option value="vivo-v29">Vivo V29</option>
-    <option value="oppo-f25">Oppo F25</option>
-    <option value="realme-12">Realme 12</option>
-    <option value="poco-x6">POCO X6</option>
-    <option value="oneplus-nord">OnePlus Nord</option>
-    <option value="xiaomi-14">Xiaomi 14</option>
-    <option value="iqoo-z9">iQOO Z9</option>
-    <option value="motorola-edge">Motorola Edge</option>
-    <option value="tecno-camon">Tecno Camon</option>
-    <option value="infinix-gt">Infinix GT</option>
-    <option value="lava-blaze">Lava Blaze</option>
-    <option value="nothing-phone">Nothing Phone</option>
-    <option value="google-pixel7">Google Pixel 7</option>
-    <option value="redmi-note13">Redmi Note 13</option>
-    <option value="realme-narzo">Realme Narzo</option>
-    <option value="honor-90">Honor 90</option>
-  </select>
+  <h1>Statusbar Generator</h1>
+  <div>
+    <label for="battery">Battery %</label>
+    <input type="text" id="battery" placeholder="Enter battery level (e.g., 85%)">
 
-  <div id="preview">
-    <img id="statusbar-img" src="" alt="Status Bar Preview" />
+    <label for="time">Time</label>
+    <input type="text" id="time" placeholder="Enter time (e.g., 12:45 PM)">
+
+    <label for="network">Network</label>
+    <input type="text" id="network" placeholder="Enter network name (e.g., Jio 4G)">
+
+    <button onclick="generateStatusbar()">Generate</button>
+
+    <div class="preview" id="previewBox"></div>
   </div>
 
-  <button id="download-btn" style="display:none;">Download Status Bar</button>
+  <script>
+    function generateStatusbar() {
+      const battery = document.getElementById("battery").value;
+      const time = document.getElementById("time").value;
+      const network = document.getElementById("network").value;
 
-  <script src="script.js"></script>
+      const output = `
+        <div class="statusbar">
+          <strong>Time:</strong> ${time} <br>
+          <strong>Battery:</strong> ${battery} <br>
+          <strong>Network:</strong> ${network}
+        </div>
+      `;
+      document.getElementById("previewBox").innerHTML = output;
+    }
+  </script>
 </body>
 </html>
