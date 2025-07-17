@@ -1,140 +1,45 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Status Bar Tool</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      background: #f1f1f1;
-    }
-    .editor {
-      max-width: 500px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-    label {
-      display: block;
-      margin: 10px 0 4px;
-    }
-    input {
-      width: 100%;
-      padding: 8px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-    #statusBar {
-      margin-top: 20px;
-      padding: 10px;
-      background: #000;
-      color: white;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-radius: 10px;
-    }
-    #screenshot {
-      margin-top: 20px;
-      width: 100%;
-      max-height: 300px;
-      object-fit: contain;
-      border-radius: 10px;
-      border: 1px solid #ccc;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      background: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #45a049;
-    }
-  </style>
-</head>
-<body>
-  <div class="editor">
-    <h2>Status Bar Editor</h2>
+<input type="file" id="screenshotUploader" accept="image/*" />
+<canvas id="mergedCanvas" style="display:none;"></canvas>
+<button onclick="downloadMerged()">Download Final Image</button>
+<script>
+  let uploadedScreenshot = null;
 
-    <label for="time">Time</label>
-    <input type="text" id="time" placeholder="10:45 AM" value="10:45 AM" />
+  document.getElementById('screenshotUploader').addEventListener('change', function (e) {
+    const reader = new FileReader();
+    reader.onload = function (event) {
+      const img = new Image();
+      img.onload = function () {
+        uploadedScreenshot = img;
+        mergeStatusBar();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(e.target.files[0]);
+  });
 
-    <label for="network">Network</label>
-    <input type="text" id="network" placeholder="Jio 4G" value="Jio 4G" />
+  function mergeStatusBar() {
+    const canvas = document.getElementById('mergedCanvas');
+    const ctx = canvas.getContext('2d');
 
-    <label for="battery">Battery %</label>
-    <input type="text" id="battery" placeholder="87%" value="87%" />
+    const statusBar = document.getElementById('statusBarImage'); // id of selected PNG
+    const width = uploadedScreenshot.width;
+    const height = uploadedScreenshot.height;
 
-    <label for="device">Device Name</label>
-    <input type="text" id="device" placeholder="Realme" value="Realme" />
+    canvas.width = width;
+    canvas.height = height;
 
-    <label for="upload">Upload Screenshot (Optional)</label>
-    <input type="file" id="upload" accept="image/*" />
+    ctx.drawImage(uploadedScreenshot, 0, 0, width, height); // base screenshot
+    ctx.drawImage(statusBar, 0, 0, width, statusBar.height); // overlay on top
 
-    <div id="statusBar">
-      <span id="status-time">10:45 AM</span>
-      <span id="status-network">Jio 4G</span>
-      <span id="status-battery">🔋87%</span>
-    </div>
+    canvas.style.display = 'block';
+  }
 
-    <img id="screenshot" src="" alt="Screenshot preview" style="display: none;"/>
-
-    <button onclick="downloadImage()">Download</button>
-  </div>
-
-  <script>
-    const timeInput = document.getElementById('time');
-    const networkInput = document.getElementById('network');
-    const batteryInput = document.getElementById('battery');
-
-    const statusTime = document.getElementById('status-time');
-    const statusNetwork = document.getElementById('status-network');
-    const statusBattery = document.getElementById('status-battery');
-    const screenshot = document.getElementById('screenshot');
-    const upload = document.getElementById('upload');
-
-    timeInput.addEventListener('input', () => {
-      statusTime.textContent = timeInput.value;
-    });
-
-    networkInput.addEventListener('input', () => {
-      statusNetwork.textContent = networkInput.value;
-    });
-
-    batteryInput.addEventListener('input', () => {
-      statusBattery.textContent = '🔋' + batteryInput.value;
-    });
-
-    upload.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function (event) {
-          screenshot.src = event.target.result;
-          screenshot.style.display = 'block';
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-
-    function downloadImage() {
-      html2canvas(document.querySelector('.editor')).then(canvas => {
-        const link = document.createElement('a');
-        link.download = 'status-bar-image.png';
-        link.href = canvas.toDataURL();
-        link.click();
-      });
-    }
-  </script>
-
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-</body>
-</html>
+  function downloadMerged() {
+    const canvas = document.getElementById('mergedCanvas');
+    const link = document.createElement('a');
+    link.download = 'final-image.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  }
+</script>
+<img id="statusBarImage" src="statusbars/vivo.png" style="display:none;" />
