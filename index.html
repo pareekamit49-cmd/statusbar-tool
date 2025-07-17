@@ -1,14 +1,120 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Status Bar Tool</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      width: 300px;
+      text-align: center;
+    }
+    .status-bar {
+      position: relative;
+      background-color: #000;
+      color: white;
+      height: 24px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 8px;
+      font-size: 12px;
+    }
+    input[type="file"] {
+      display: block;
+      margin: 10px auto;
+    }
+    img.preview {
+      width: 100%;
+      margin-top: 10px;
+      border-radius: 8px;
+      display: none;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      border: none;
+      background-color: #2196f3;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <h1>Status Bar Tool</h1>
-  <p>Download your file below:</p>
 
-  <a href="tool.apk" download>
-    <button style="padding:10px 20px; background-color:green; color:white; font-size:16px;">Download Now</button>
-  </a>
+  <div class="container">
+    <h2>Status Bar Tool</h2>
+    <div class="status-bar" id="statusBar">
+      <span>9:41 AM</span>
+      <span>📶 🔋</span>
+    </div>
+
+    <input type="file" accept="image/*" id="upload" />
+    <img id="preview" class="preview" />
+
+    <button onclick="downloadImage()">Download</button>
+  </div>
+
+  <script>
+    const upload = document.getElementById("upload");
+    const preview = document.getElementById("preview");
+
+    upload.addEventListener("change", function () {
+      const file = this.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          preview.src = e.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    function downloadImage() {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d");
+      const img = document.getElementById("preview");
+
+      if (!img.src) {
+        alert("Please upload an image first.");
+        return;
+      }
+
+      canvas.width = img.width;
+      canvas.height = img.height + 24; // status bar height
+
+      // Draw status bar
+      ctx.fillStyle = "#000";
+      ctx.fillRect(0, 0, canvas.width, 24);
+      ctx.fillStyle = "#fff";
+      ctx.font = "14px sans-serif";
+      ctx.fillText("9:41 AM", 10, 16);
+      ctx.fillText("📶 🔋", canvas.width - 50, 16);
+
+      // Draw image below status bar
+      ctx.drawImage(img, 0, 24, img.width, img.height);
+
+      const link = document.createElement("a");
+      link.download = "statusbar-image.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+  </script>
 </body>
 </html>
