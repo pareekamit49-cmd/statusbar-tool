@@ -1,48 +1,103 @@
 <!DOCTYPE html>
-<html lang="hi">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Status Bar Tool</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .phone {
+      width: 300px;
+      height: 600px;
+      background: white;
+      border: 2px solid #ccc;
+      border-radius: 40px;
+      position: relative;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      overflow: hidden;
+      margin-top: 30px;
+    }
+
+    .status-bar {
+      height: 24px;
+      width: 100%;
+      background: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 10px;
+      font-size: 12px;
+    }
+
+    .status-bar span {
+      color: white;
+    }
+
+    .screen {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    form {
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    input, select, button {
+      margin: 5px;
+      padding: 5px 10px;
+      font-size: 14px;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>Status Bar Generator</h1>
+    <h2>Status Bar Tool</h2>
+    <form id="statusForm">
+      <input type="text" id="time" placeholder="Time (e.g. 12:45)" />
+      <input type="text" id="battery" placeholder="Battery (e.g. 87%)" />
+      <input type="text" id="network" placeholder="Network (e.g. 4G LTE)" />
+      <button type="submit">Set Status Bar</button>
+    </form>
 
-    <label for="brandSelect">मोबाइल ब्रांड चुनें:</label>
-    <select id="brandSelect">
-      <option value="iphone">iPhone</option>
-      <option value="samsung">Samsung</option>
-      <option value="vivo">Vivo</option>
-      <option value="realme">Realme</option>
-      <option value="oppo">Oppo</option>
-    </select>
-
-    <br><br>
-
-    <label for="screenshotUpload">Screenshot अपलोड करें:</label>
-    <input type="file" id="screenshotUpload" accept="image/*">
-
-    <br><br>
-
-    <button onclick="generateStatusBar()">Status Bar जोड़ें</button>
-
-    <br><br>
-
-    <div id="previewContainer"></div>
+    <div class="phone">
+      <div class="status-bar" id="statusBar">
+        <span id="timeDisplay">12:00</span>
+        <span id="networkDisplay">LTE</span>
+        <span id="batteryDisplay">100%</span>
+      </div>
+      <div class="screen">
+        <p>This is mobile preview screen.</p>
+      </div>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script>
+    const form = document.getElementById("statusForm");
+    const timeDisplay = document.getElementById("timeDisplay");
+    const networkDisplay = document.getElementById("networkDisplay");
+    const batteryDisplay = document.getElementById("batteryDisplay");
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      timeDisplay.textContent = document.getElementById("time").value || "12:00";
+      networkDisplay.textContent = document.getElementById("network").value || "LTE";
+      batteryDisplay.textContent = document.getElementById("battery").value || "100%";
+    });
+  </script>
 </body>
 </html>
-<div class="status-bar">
-  <div class="left-icons">
-    <span class="signal">&#128246;</span> <!-- Network -->
-    <span class="wifi">&#128241;</span>   <!-- WiFi -->
-  </div>
-  <div class="center-time">12:34</div>
-  <div class="right-icons">
-    <span class="battery">&#128267;</span> <!-- Battery -->
-  </div>
-</div>
