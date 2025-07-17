@@ -1,103 +1,91 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Status Bar Tool</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shorts Promotion Demo</title>
   <style>
     body {
-      margin: 0;
+      background-color: #e0e0e0;
       font-family: Arial, sans-serif;
-      background: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      padding: 30px 10px;
     }
-
-    .container {
+    .mobile-frame {
+      width: 360px;
+      height: 720px;
+      background-color: #fff;
+      border-radius: 30px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      position: relative;
+    }
+    .status-bar {
+      background-color: #f4f4f4;
+      padding: 8px 12px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-left {
+      display: flex;
+      gap: 5px;
+    }
+    .status-right {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .video-content {
+      margin-top: 20px;
+      padding: 10px;
+      height: calc(100% - 40px);
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 20px;
+      justify-content: center;
     }
-
-    .phone {
-      width: 300px;
-      height: 600px;
-      background: white;
-      border: 2px solid #ccc;
-      border-radius: 40px;
-      position: relative;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-      overflow: hidden;
-      margin-top: 30px;
+    .video-box {
+      width: 90%;
+      height: 400px;
+      background-color: #000;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      background-image: url('https://i.postimg.cc/SKkq3gHp/yt-frame.jpg');
+      background-size: cover;
+      background-position: center;
     }
-
-    .status-bar {
-      height: 24px;
-      width: 100%;
-      background: black;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 10px;
-      font-size: 12px;
-    }
-
-    .status-bar span {
-      color: white;
-    }
-
-    .screen {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-
-    form {
-      margin-top: 20px;
+    .promo-text {
+      font-size: 16px;
+      color: #333;
       text-align: center;
-    }
-
-    input, select, button {
-      margin: 5px;
-      padding: 5px 10px;
-      font-size: 14px;
+      padding: 0 10px;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Status Bar Tool</h2>
-    <form id="statusForm">
-      <input type="text" id="time" placeholder="Time (e.g. 12:45)" />
-      <input type="text" id="battery" placeholder="Battery (e.g. 87%)" />
-      <input type="text" id="network" placeholder="Network (e.g. 4G LTE)" />
-      <button type="submit">Set Status Bar</button>
-    </form>
 
-    <div class="phone">
-      <div class="status-bar" id="statusBar">
-        <span id="timeDisplay">12:00</span>
-        <span id="networkDisplay">LTE</span>
-        <span id="batteryDisplay">100%</span>
+  <div class="mobile-frame">
+    <div class="status-bar">
+      <div class="status-left">
+        <span>🕘 9:41 AM</span>
       </div>
-      <div class="screen">
-        <p>This is mobile preview screen.</p>
+      <div class="status-right">
+        <span>📶</span>
+        <span>📡</span>
+        <span>🔋</span>
+      </div>
+    </div>
+    
+    <div class="video-content">
+      <div class="video-box"></div>
+      <div class="promo-text">
+        हमारी YouTube Shorts वीडियो को प्रमोट करें — वीडियो एडिटिंग, क्रिएटिव कंटेंट और ब्रांडिंग के साथ। DM करें अभी!
       </div>
     </div>
   </div>
 
-  <script>
-    const form = document.getElementById("statusForm");
-    const timeDisplay = document.getElementById("timeDisplay");
-    const networkDisplay = document.getElementById("networkDisplay");
-    const batteryDisplay = document.getElementById("batteryDisplay");
-
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      timeDisplay.textContent = document.getElementById("time").value || "12:00";
-      networkDisplay.textContent = document.getElementById("network").value || "LTE";
-      batteryDisplay.textContent = document.getElementById("battery").value || "100%";
-    });
-  </script>
 </body>
 </html>
