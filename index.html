@@ -1,84 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Statusbar Tool</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f2f2;
-      margin: 0;
-      padding: 2rem;
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-    }
-    .statusbar {
-      background-color: #222;
-      color: white;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 1rem;
-      font-size: 18px;
-    }
-    label {
-      display: block;
-      margin: 10px 0 5px;
-    }
-    input[type="text"] {
-      padding: 10px;
-      width: 100%;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      margin-bottom: 15px;
-    }
-    button {
-      padding: 10px 15px;
-      background-color: #28a745;
-      border: none;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-    .preview {
-      margin-top: 20px;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Status Bar Tool</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Statusbar Generator</h1>
-  <div>
-    <label for="battery">Battery %</label>
-    <input type="text" id="battery" placeholder="Enter battery level (e.g., 85%)">
+  <div class="container">
+    <h1>Status Bar Generator</h1>
 
-    <label for="time">Time</label>
-    <input type="text" id="time" placeholder="Enter time (e.g., 12:45 PM)">
+    <label for="brandSelect">मोबाइल ब्रांड चुनें:</label>
+    <select id="brandSelect">
+      <option value="iphone">iPhone</option>
+      <option value="samsung">Samsung</option>
+      <option value="vivo">Vivo</option>
+      <option value="realme">Realme</option>
+      <option value="oppo">Oppo</option>
+    </select>
 
-    <label for="network">Network</label>
-    <input type="text" id="network" placeholder="Enter network name (e.g., Jio 4G)">
+    <br><br>
 
-    <button onclick="generateStatusbar()">Generate</button>
+    <label for="screenshotUpload">Screenshot अपलोड करें:</label>
+    <input type="file" id="screenshotUpload" accept="image/*">
 
-    <div class="preview" id="previewBox"></div>
+    <br><br>
+
+    <button onclick="generateStatusBar()">Status Bar जोड़ें</button>
+
+    <br><br>
+
+    <div id="previewContainer"></div>
   </div>
 
-  <script>
-    function generateStatusbar() {
-      const battery = document.getElementById("battery").value;
-      const time = document.getElementById("time").value;
-      const network = document.getElementById("network").value;
-
-      const output = `
-        <div class="statusbar">
-          <strong>Time:</strong> ${time} <br>
-          <strong>Battery:</strong> ${battery} <br>
-          <strong>Network:</strong> ${network}
-        </div>
-      `;
-      document.getElementById("previewBox").innerHTML = output;
-    }
-  </script>
+  <script src="script.js"></script>
 </body>
 </html>
